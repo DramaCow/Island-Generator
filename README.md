@@ -23,4 +23,4 @@ Unity uses the reverse winding order of blender. In edit mode, select all faces 
 ## In Unity
 Attach a concave (default) "mesh collider" to the default child of the object in order to enable collisions.
 Island can be scaled by scaling the parent object.
-**Use THICK RAYCASTS (diameter=1) with a* pathfinding to let AI get close to the edge**
+**Use THICK RAYCASTS (diameter=1) with a* pathfinding to let AI get close to the edge.**
