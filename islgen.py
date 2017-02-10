@@ -61,19 +61,19 @@ def relax(vor):
 # ============
 
 # Seed random number generators
-try:               arg_seed = sys.argv[1]
-except IndexError: arg_seed = time.clock()
-try:               arg_points = int(sys.argv[2])
+try:               arg_points = int(sys.argv[1])
 except IndexError: arg_points = 256
-try:               arg_relax = int(sys.argv[3])
+try:               arg_relax = int(sys.argv[2])
 except IndexError: arg_relax = 4
-try:               arg_span = int(sys.argv[4])
+try:               arg_span = int(sys.argv[3])
 except IndexError: arg_span = 4
+try:               arg_seed = sys.argv[4]
+except IndexError: arg_seed = time.clock()
 
-print("seed = " + str(arg_seed))
 print("points = " + str(arg_points))
 print("relax iterations = " + str(arg_relax))
 print("span = " + str(arg_span))
+print("seed = " + str(arg_seed))
 random.seed(arg_seed)
 
 # Generate relaxed voronoi tesselation
