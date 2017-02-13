@@ -65,37 +65,40 @@ with open("mesh.obj", "w") as f :
 # ====================
 
 fig, ax = plt.subplots()
-plt.hold(True)
+
+def plot_voronoi(vor, land):
+  plt.hold(True)
+  
+  # Mark the points
+  ax.plot(vor.points[:,0], vor.points[:, 1], 'wo', markersize=4, picker=8)
+  fig.canvas.mpl_connect('pick_event', onpick)
+    
+  # Mark the Voronoi vertices.
+  ax.plot(vor.vertices[:,0], vor.vertices[:, 1], 'ko', markersize=6)
+    
+  for vpair in vor.ridge_vertices:
+    if vpair[0] >= 0 and vpair[1] >= 0:
+      v0 = vor.vertices[vpair[0]]
+      v1 = vor.vertices[vpair[1]]
+      # Draw a line from v0 to v1.
+      ax.plot([v0[0], v1[0]], [v0[1], v1[1]], 'k', linewidth=2)
+    
+  ax.set_xlim([-0.25, 1.25])
+  ax.set_ylim([-0.25, 1.25])
+  
+  for i, r in enumerate(vor.point_region):
+    if land[i] == 1:
+      polygon = [vor.vertices[v] for v in vor.regions[r]]
+      ax.fill(*zip(*polygon), color="green")
+  
+  plt.hold(False)
+  plt.show()
 
 def onpick(event):
   ind = event.ind
-  print('onpick scatter:', ind)
   land[ind] = 1-land[ind]
-  if land[i] == 1:
-    polygon = [vor.vertices[v] for v in vor.regions[r]]
-    ax.fill(*zip(*polygon), color="green")
+  ax.clear()
+  plot_voronoi(vor, land)
+  fig.canvas.draw()
 
-# Mark the points
-ax.plot(vor.points[:,0], vor.points[:, 1], 'wo', markersize=8, picker=8)
-fig.canvas.mpl_connect('pick_event', onpick)
-  
-# Mark the Voronoi vertices.
-ax.plot(vor.vertices[:,0], vor.vertices[:, 1], 'ko', markersize=6)
-  
-for vpair in vor.ridge_vertices:
-  if vpair[0] >= 0 and vpair[1] >= 0:
-    v0 = vor.vertices[vpair[0]]
-    v1 = vor.vertices[vpair[1]]
-    # Draw a line from v0 to v1.
-    ax.plot([v0[0], v1[0]], [v0[1], v1[1]], 'k', linewidth=2)
-  
-ax.set_xlim([-0.25, 1.25])
-ax.set_ylim([-0.25, 1.25])
-
-for i, r in enumerate(vor.point_region):
-  if land[i] == 1:
-    polygon = [vor.vertices[v] for v in vor.regions[r]]
-    ax.fill(*zip(*polygon), color="green")
-
-plt.hold(False)
-plt.show()
+plot_voronoi(vor, land)
