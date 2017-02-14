@@ -66,6 +66,12 @@ with open("mesh.obj", "w") as f :
 
 fig, ax = plt.subplots()
 
+def fill_polygons(vor, land):
+  for i, r in enumerate(vor.point_region):
+    if land[i] == 1:
+      polygon = [vor.vertices[v] for v in vor.regions[r]]
+      ax.fill(*zip(*polygon), color="green")
+
 def plot_voronoi(vor, land):
   plt.hold(True)
   
@@ -86,10 +92,7 @@ def plot_voronoi(vor, land):
   ax.set_xlim([-0.25, 1.25])
   ax.set_ylim([-0.25, 1.25])
   
-  for i, r in enumerate(vor.point_region):
-    if land[i] == 1:
-      polygon = [vor.vertices[v] for v in vor.regions[r]]
-      ax.fill(*zip(*polygon), color="green")
+  fill_polygons(vor, land)
   
   plt.hold(False)
   plt.show()
@@ -97,7 +100,7 @@ def plot_voronoi(vor, land):
 def onpick(event):
   ind = event.ind
   land[ind] = 1-land[ind]
-  ax.clear()
+  #ax.clear()
   plot_voronoi(vor, land)
   fig.canvas.draw()
 
